@@ -1,0 +1,15 @@
+{
+  "name": "pool-party",
+  "version": "1.0.0",
+  "description": "Il s'agit d'un projet de création d'une plateforme de location de piscines, permettant à ceux qui possèdent les piscines de les louer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VanDerJoys/pool-party"
+  },
+  "author": "",
+  "license": "ISC"
+}
