@@ -4,8 +4,7 @@
   "description": "Il s'agit d'un projet de création d'une plateforme de location de piscines, permettant à ceux qui possèdent les piscines de les louer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index"
+    "start": "node index"
   },
   "repository": {
     "type": "git",
