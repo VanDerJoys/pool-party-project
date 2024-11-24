@@ -1,20 +1,18 @@
 const moment = require("moment");
-const sessionModel = require("./pool-model");
+const poolModel = require("./pool-model");
 
-class Session {
-    /**
-     * FONCTION D'AJOUT D'UNE SESSION
-     *
-     * Elle prend en paramètre l'identifiant de celui qui va coacher la séance et l'objet contenant les informations de la séance
-     */
-    async addSession(session) {
+class PoolControler {
+
+    async addPool(poolDetails) {
         try {
-            let sessionResults = new sessionModel({
-                createdAt: moment().format("YYYY-MM-DD"),
-                label: session.label,
-                description: session.description,
-                user: session.coachId,
-                price: session.price,
+            let sessionResults = new poolModel({
+                name: poolDetails.name,
+                description: poolDetails.description,
+                password: poolDetails.password,
+                price: poolDetails.price,
+                date: poolDetails.date,
+                time: poolDetails.time,
+                address: poolDetails.city
             });
 
             await sessionResults.save();
@@ -30,9 +28,9 @@ class Session {
         }
     }
 
-    async getSessions() {
+    async getPools() {
         try {
-            let pools = await sessionModel
+            let pools = await poolModel
                 .find()
             // .populate("user", { fullName: 1 });
             return {
@@ -48,47 +46,9 @@ class Session {
         }
     }
 
-    async getCustomerSessions(page, limit, idCustomer) {
-        try {
-            const skip = (page - 1) * (limit || 0);
-            const totalCount = await programmedSession.countDocuments();
-            const totalPages = Math.ceil(totalCount / limit);
-            let nextPage = null;
-            if (page < totalPages) {
-                nextPage = page + 1;
-            }
-
-            let sessions = await programmedSession
-                .find({ customer: idCustomer })
-                .skip(skip)
-                .limit(limit)
-                .populate("user", { fullName: 1 })
-                .populate({
-                    path: 'session',
-                    match: { status: { $ne: 'active' } }
-                });
-
-            return {
-                status: 200,
-                message: "Séances récupérées",
-                data: {
-                    sessions: sessions,
-                    totalPages: totalPages,
-                    currentPage: page,
-                    nextPage: nextPage
-                },
-            };
-        } catch (error) {
-            throw {
-                status: 500,
-                message: 'Erreur survenue'
-            }
-        }
-    }
-
     async updateSession(sessionId, sessionDetails) {
         try {
-            await sessionModel.updateOne({ _id: sessionId },
+            await poolModel.updateOne({ _id: sessionId },
                 {
                     $set: {
                         coach: sessionDetails.coach,
@@ -114,7 +74,7 @@ class Session {
 
     async getPool(poolId) {
         try {
-            let pool = await sessionModel.findOne({ _id: poolId });
+            let pool = await poolModel.findOne({ _id: poolId });
 
             return {
                 status: 200,
@@ -139,7 +99,7 @@ class Session {
                 const expired = sessionResults.every(session => moment(session.endDate) < moment().format('YYYY-MM-DD'));
 
                 if (expired) {
-                    await sessionModel.updateOne({ _id: sessionId }, { $set: { status: 'deleted' } })
+                    await poolModel.updateOne({ _id: sessionId }, { $set: { status: 'deleted' } })
                     return {
                         status: 200,
                         message: 'Session supprimée'
@@ -151,7 +111,7 @@ class Session {
                     }
                 }
             } else {
-                await sessionModel.updateOne({ _id: sessionId }, { $set: { status: 'deleted' } })
+                await poolModel.updateOne({ _id: sessionId }, { $set: { status: 'deleted' } })
                 return {
                     status: 200,
                     message: 'Session supprimée'
@@ -167,4 +127,4 @@ class Session {
 
 }
 
-module.exports = Session;
+module.exports = PoolControler;

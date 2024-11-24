@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Session = require("./pool-controler");
+const Pool = require("./pool-controler");
 
-let session = new Session();
+let pool = new Pool();
 
 router.post("/", (req, res) => {
-    session
-        .addSession(req.body)
+    pool
+        .addPool(req.body)
         .then((results) => {
             res.status(results.status).send(results);
         })
@@ -16,9 +16,9 @@ router.post("/", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-    // Here we get all sessions
-    session
-        .getSessions()
+    // Here we get all pools
+    pool
+        .getPools()
         .then((results) => {
             res.status(results.status).send(results);
         })
@@ -27,9 +27,9 @@ router.get("/", (req, res) => {
         });
 });
 
-router.put("/:sessionId", (req, res) => {
-    session
-        .updateSession(req.params.sessionId, req.body)
+router.put("/:poolId", (req, res) => {
+    pool
+        .updatepool(req.params.poolId, req.body)
         .then((results) => {
             res.status(results.status).send(results);
         })
@@ -38,9 +38,9 @@ router.put("/:sessionId", (req, res) => {
         });
 });
 
-router.delete("/:sessionId", (req, res) => {
-    session
-        .deleteSession(req.params.sessionId)
+router.delete("/:poolId", (req, res) => {
+    pool
+        .deletepool(req.params.poolId)
         .then((results) => {
             res.status(results.status).send(results);
         })
@@ -50,11 +50,11 @@ router.delete("/:sessionId", (req, res) => {
 });
 
 /**
- * PROGRAMMED SESSIONS MANAGEMENT
+ * PROGRAMMED poolS MANAGEMENT
  */
 router.get("/attributions", (req, res) => {
-    session
-        .getProgrammedSessions(req.query.page, req.query.limit)
+    pool
+        .getProgrammedpools(req.query.page, req.query.limit)
         .then((results) => {
             res.status(results.status).json(results);
         })
@@ -63,9 +63,9 @@ router.get("/attributions", (req, res) => {
         });
 });
 
-router.get("/:sessionId", (req, res) => {
-    session
-        .getPool(req.params.sessionId)
+router.get("/:poolId", (req, res) => {
+    pool
+        .getPool(req.params.poolId)
         .then((results) => {
             res.status(results.status).json(results);
         })
